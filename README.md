@@ -1,1 +1,1 @@
-# MCB_Senior_Thesis
+This repository contains the data and code used for my MCB senior thesis. 

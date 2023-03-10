@@ -1,1 +1,3 @@
-This repository contains the data and code used for my MCB senior thesis. 
+*MCB Senior Thesis*
+
+This repository contains the data and code used for my MCB senior thesis. The "bYS_raw_data_wrangling" document contains the code used for wrangling and combining datasets from many individual B. subtilis cells. Due to the high number of individual datasets that were used (48 different datasets), these datasets are not posted here but are instead available by request. The "bYS_full" csv contains the final wrangled dataset. The "bYS_data_visualization" document contains the code for data analysis (p-value calculations) and data visualization (density plots and boxplots).

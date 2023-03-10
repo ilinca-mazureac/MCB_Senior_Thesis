@@ -1,0 +1,165 @@
+---
+title: "bYS_data_visualization"
+output: html_document
+date: "2023-03-10"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(janitor)
+library(readxl)
+library(readr)
+library(dplyr)
+library(tidyverse)
+```
+
+```{r}
+bYS <- read_csv("~/bYS_full.csv")
+```
+
+```{r}
+ ggplot(data = bYS, mapping = aes(x = Duration, fill = strain)) +
+  geom_density(alpha = 0.5, adjust=3.5) +
+  scale_fill_brewer(type = "qual", palette = 2) +
+  labs(title= "Lifetime of MreB filaments across strains",  
+     y = "Density",
+     x = "Lifetime (seconds)") +
+  theme_classic() +
+  theme(legend.position = "bottom") 
+
+ggplot(data = bYS, mapping = aes(x = strain, y = Duration)) +
+  geom_boxplot(alpha = 0.05) + 
+  labs(title= "Lifetime of MreB track across strains",  
+     y = "Lifetime (seconds)",
+     x = "Strain") +
+  theme_classic() + 
+   stat_summary(fun = mean,
+                geom = "point",
+                color = "blue",
+                size = 3)
+
+bYS_filtered <- bYS %>%
+  filter(track_displacement >= 0.36 & nr_spots >= 3)
+bYS_filtered
+
+bYS_filtered$Duration <- as.numeric(as.character(bYS_filtered$Duration))
+
+ggplot(data = bYS_filtered, mapping = aes(x = Duration, fill = strain)) +
+  geom_density(alpha = 0.5, adjust=2.5) +
+  scale_fill_brewer(type = "qual", palette = 2) +
+  labs(title= "Lifetime of MreB filaments across strains (after filtering)",  
+     y = "Density",
+     x = "Lifetime (seconds)") +
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+ggplot(data = bYS_filtered, mapping = aes(x = strain, y = Duration)) +
+  geom_boxplot(alpha = 0.05) + 
+  labs(title= "Lifetime of MreB track across strains (after filtering)",  
+     y = "Lifetime (seconds)",
+     x = "Strain") +
+  theme_classic() + 
+   stat_summary(fun = mean,
+                geom = "point",
+                color = "blue",
+                size = 3)
+
+bYS_nr <- bYS %>% 
+  group_by(strain) %>% 
+  summarize(nr=n())
+bYS_nr
+
+bYS_nr_filtered <- bYS_filtered %>% 
+  group_by(strain) %>% 
+  summarize(nr=n())
+bYS_nr_filtered
+```
+
+```{r}
+bYS_duration <- bYS%>% 
+  group_by(strain) %>% 
+  summarize(mean_duration = mean(Duration), 
+            std_dev_duration = sd(Duration)) 
+bYS_duration
+
+mod <- aov(Duration ~ strain, data = bYS)
+summary(mod)
+```
+
+```{r}
+bYS_duration <- bYS_filtered%>% 
+  group_by(strain) %>% 
+  summarize(mean_duration = mean(Duration), 
+            std_dev_duration = sd(Duration)) 
+bYS_duration
+
+mod <- aov(Duration ~ strain, data = bYS_filtered)
+summary(mod)
+```
+
+```{r}
+ggplot(data = bYS, mapping = aes(x = total_distance, fill = strain)) +
+  geom_density(alpha = 0.5, adjust=2.5) +
+  scale_fill_brewer(type = "qual", palette = 2) +
+  labs(title= "Total distance traveled by MreB filaments across RodZ mutants",  
+     y = "Density",
+     x = "Total distance traveled (microns)") +
+  theme_classic() +
+ theme(legend.position = "bottom")
+
+ggplot(data = bYS, mapping = aes(x = strain, y = total_distance)) +
+  geom_boxplot(alpha = 0.05) + 
+  labs(title= "Distance traveled by MreB filaments across strains",  
+     y = "Distance traveled (microns)",
+     x = "Strain") +
+  theme_classic() + 
+   stat_summary(fun = mean,
+                geom = "point",
+                color = "blue",
+                size = 3)
+
+ggplot(data = bYS_filtered, mapping = aes(x = total_distance, fill = strain)) +
+  geom_density(alpha = 0.5, adjust = 1.5) +
+  scale_fill_brewer(type = "qual", palette = 2) +
+  labs(title= "Total distance traveled by MreB filaments across RodZ mutants (after filtering)",  
+     y = "Density",
+     x = "Total distance traveled (microns)") +
+  theme_classic()+
+ theme(legend.position = "bottom")
+
+ggplot(data = bYS_filtered, mapping = aes(x = strain, y = total_distance)) +
+  geom_boxplot(alpha = 0.05) + 
+  labs(title= "Distance traveled by MreB filaments across strains (after filtering)",  
+     y = "Distance traveled (microns)",
+     x = "Strain") +
+  theme_classic() + 
+   stat_summary(fun = mean,
+                geom = "point",
+                color = "blue",
+                size = 3)
+```
+```{r}
+bYS_distance <- bYS%>% 
+  group_by(strain) %>% 
+  summarize(mean_distance = mean(total_distance), 
+            std_dev_distance = sd(total_distance)) 
+bYS_distance
+
+mod <- aov(total_distance ~ strain, data = bYS)
+summary(mod)
+```
+
+```{r}
+bYS_distance <- bYS_filtered%>% 
+  group_by(strain) %>% 
+  summarize(mean_distance = mean(total_distance), 
+            std_dev_distance = sd(total_distance)) 
+bYS_distance
+
+mod <- aov(total_distance ~ strain, data = bYS_filtered)
+summary(mod)
+```
+

@@ -1,0 +1,910 @@
+---
+title: "bYS raw data wrangling"
+output:
+  html_document: default
+date: "2023-03-01"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(janitor)
+library(readxl)
+library(readr)
+library(dplyr)
+library(tidyverse)
+```
+
+```{r}
+# In the code below, I upload the tracks for the bYS39 (WT) strain
+# Each CSV represents data on tracks for a cell or multiple cells that were imaged at the same time
+# For each CSV, I filter out the tracks that start in the first frame because we cannot accurately measure lifetime if the track started before the video recording started 
+# For each CSV, I also filter out the tracks that end in the last frame because we cannot accurately measure lifetime if the track ended after the video recording ended 
+
+bYS39_1 <- read_csv("R1. (1.16)39,5nM,LP20,100ms,step-0.45,range-1.8,count-5,5sec,3min002_Reconstructed.csv", skip=2)
+
+bYS39_1 <- bYS39_1 %>% 
+  drop_na() 
+
+colnames(bYS39_1)[11] <- "track_start"
+colnames(bYS39_1)[12] <- "track_stop"
+
+bYS39_1$track_stop <- as.numeric(as.character(bYS39_1$track_stop))  
+bYS39_1$track_start <- as.numeric(as.character(bYS39_1$track_start))  
+
+min <- min(bYS39_1$track_start)
+max <- max(bYS39_1$track_stop)
+
+bYS39_1 <- bYS39_1 %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_2 <- read_csv("R2. (1.16)39,5nM,LP20,100ms,step-0.45,range-1.8,count-5,5sec,3min003_Reconstructed.csv", skip=2)
+
+bYS39_2 <- bYS39_2 %>% 
+  drop_na() 
+
+colnames(bYS39_2)[11] <- "track_start"
+colnames(bYS39_2)[12] <- "track_stop"
+
+bYS39_2$track_stop <- as.numeric(as.character(bYS39_2$track_stop))  
+bYS39_2$track_start <- as.numeric(as.character(bYS39_2$track_start))  
+
+min <- min(bYS39_2$track_start)
+max <- max(bYS39_2$track_stop)
+
+bYS39_2 <- bYS39_2 %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_3a <- read_csv("R3a. (1.18)39,5nM,LP20,100ms,step-0.45,range-1.8,count-5,5sec,3min002_Reconstructed.csv", skip=2)
+
+bYS39_3a <- bYS39_3a %>% 
+  drop_na() 
+
+colnames(bYS39_3a)[11] <- "track_start"
+colnames(bYS39_3a)[12] <- "track_stop"
+
+bYS39_3a$track_stop <- as.numeric(as.character(bYS39_3a$track_stop))  
+bYS39_3a$track_start <- as.numeric(as.character(bYS39_3a$track_start)) 
+
+min <- min(bYS39_3a$track_start)
+max <- max(bYS39_3a$track_stop)
+
+bYS39_3a <- bYS39_3a %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_3b <- read_csv("R3b. (1.18) 39,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min002_Reconstructed.csv", skip=2)
+
+bYS39_3b <- bYS39_3b %>% 
+  drop_na() 
+
+colnames(bYS39_3b)[11] <- "track_start"
+colnames(bYS39_3b)[12] <- "track_stop"
+
+bYS39_3b$track_stop <- as.numeric(as.character(bYS39_3b$track_stop))  
+bYS39_3b$track_start <- as.numeric(as.character(bYS39_3b$track_start))  
+
+min <- min(bYS39_3b$track_start)
+max <- max(bYS39_3b$track_stop)
+
+bYS39_3b <- bYS39_3b %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_3c <- read_csv("R3c. (1.18) 39,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min002_Reconstructed.csv", skip=2)
+
+bYS39_3c <- bYS39_3c %>% 
+  drop_na() 
+
+colnames(bYS39_3c)[11] <- "track_start"
+colnames(bYS39_3c)[12] <- "track_stop"
+
+bYS39_3c$track_stop <- as.numeric(as.character(bYS39_3c$track_stop))  
+bYS39_3c$track_start <- as.numeric(as.character(bYS39_3c$track_start))  
+
+min <- min(bYS39_3c$track_start)
+max <- max(bYS39_3c$track_stop)
+
+bYS39_3c <- bYS39_3c %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_3d <- read_csv("R3d. (1.18) 39,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min002_Reconstructed.csv", skip=2)
+
+bYS39_3d <- bYS39_3d %>% 
+  drop_na() 
+
+colnames(bYS39_3d)[11] <- "track_start"
+colnames(bYS39_3d)[12] <- "track_stop"
+
+bYS39_3d$track_stop <- as.numeric(as.character(bYS39_3d$track_stop))  
+bYS39_3d$track_start <- as.numeric(as.character(bYS39_3d$track_start))  
+
+min <- min(bYS39_3d$track_start)
+max <- max(bYS39_3d$track_stop)
+
+bYS39_3d <- bYS39_3d %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_4a <- read_csv("R4a. (1.18) 39,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min003_Reconstructed-1.csv", skip=2)
+
+bYS39_4a <- bYS39_4a %>% 
+  drop_na() 
+
+colnames(bYS39_4a)[11] <- "track_start"
+colnames(bYS39_4a)[12] <- "track_stop"
+
+bYS39_4a$track_stop <- as.numeric(as.character(bYS39_4a$track_stop))  
+bYS39_4a$track_start <- as.numeric(as.character(bYS39_4a$track_start))  
+
+min <- min(bYS39_4a$track_start)
+max <- max(bYS39_4a$track_stop)
+
+bYS39_4a <- bYS39_4a %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_4b <- read_csv("R4b. (1.18) 39,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min003_Reconstructed-1.csv", skip=2)
+
+bYS39_4b <- bYS39_4b %>% 
+  drop_na() 
+
+colnames(bYS39_4b)[11] <- "track_start"
+colnames(bYS39_4b)[12] <- "track_stop"
+
+bYS39_4b$track_stop <- as.numeric(as.character(bYS39_4b$track_stop)) 
+bYS39_4b$track_start <- as.numeric(as.character(bYS39_4b$track_start))  
+
+min <- min(bYS39_4b$track_start)
+max <- max(bYS39_4b$track_stop)
+
+bYS39_4b <- bYS39_4b %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_4c <- read_csv("R4c. (1.18) 39,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min003_Reconstructed-1.csv", skip=2)
+
+bYS39_4c <- bYS39_4c %>% 
+  drop_na() 
+
+colnames(bYS39_4c)[11] <- "track_start"
+colnames(bYS39_4c)[12] <- "track_stop"
+
+bYS39_4c$track_stop <- as.numeric(as.character(bYS39_4c$track_stop))  
+bYS39_4c$track_start <- as.numeric(as.character(bYS39_4c$track_start))  
+
+min <- min(bYS39_4c$track_start)
+max <- max(bYS39_4c$track_stop)
+
+bYS39_4c <- bYS39_4c %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_4d <- read_csv("R4d.(1.18)39,5nM,LP20,100ms,step-0.45,range-1.8,count-5,5sec,3min003_Reconstructed-1.csv", skip=2)
+
+bYS39_4d <- bYS39_4d %>% 
+  drop_na() 
+
+colnames(bYS39_4d)[11] <- "track_start"
+colnames(bYS39_4d)[12] <- "track_stop"
+
+bYS39_4d$track_stop <- as.numeric(as.character(bYS39_4d$track_stop))  
+bYS39_4d$track_start <- as.numeric(as.character(bYS39_4d$track_start))  
+
+min <- min(bYS39_4d$track_start)
+max <- max(bYS39_4d$track_stop)
+
+bYS39_4d <- bYS39_4d %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_4e <- read_csv("R4e. (1.18) 39,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min003_Reconstructed-1.csv", skip=2)
+
+bYS39_4e <- bYS39_4e %>% 
+  drop_na() 
+
+colnames(bYS39_4e)[11] <- "track_start"
+colnames(bYS39_4e)[12] <- "track_stop"
+
+bYS39_4e$track_stop <- as.numeric(as.character(bYS39_4e$track_stop))  
+bYS39_4e$track_start <- as.numeric(as.character(bYS39_4e$track_start))  
+
+min <- min(bYS39_4e$track_start)
+max <- max(bYS39_4e$track_stop)
+
+bYS39_4e <- bYS39_4e %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_5a <- read_csv("R5a. (1.18) 39,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min004_Reconstructed-1.csv", skip=2)
+
+bYS39_5a <- bYS39_5a %>% 
+  drop_na() 
+
+colnames(bYS39_5a)[11] <- "track_start"
+colnames(bYS39_5a)[12] <- "track_stop"
+
+bYS39_5a$track_stop <- as.numeric(as.character(bYS39_5a$track_stop))  
+bYS39_5a$track_start <- as.numeric(as.character(bYS39_5a$track_start))  
+
+min <- min(bYS39_5a$track_start)
+max <- max(bYS39_5a$track_stop)
+
+bYS39_5a <- bYS39_5a %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_5b <- read_csv("R5b. (1.18) 39,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min004_Reconstructed-1.csv", skip=2)
+
+bYS39_5b <- bYS39_5b %>% 
+  drop_na() 
+
+colnames(bYS39_5b)[11] <- "track_start"
+colnames(bYS39_5b)[12] <- "track_stop"
+
+bYS39_5b$track_stop <- as.numeric(as.character(bYS39_5b$track_stop))  
+bYS39_5b$track_start <- as.numeric(as.character(bYS39_5b$track_start))  
+
+min <- min(bYS39_5b$track_start)
+max <- max(bYS39_5b$track_stop)
+
+bYS39_5b <- bYS39_5b %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_5c <- read_csv("R5c. (1.18) 39,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min004_Reconstructed-1.csv", skip=2)
+
+bYS39_5c <- bYS39_5c %>% 
+  drop_na() 
+
+colnames(bYS39_5c)[11] <- "track_start"
+colnames(bYS39_5c)[12] <- "track_stop"
+
+bYS39_5c$track_stop <- as.numeric(as.character(bYS39_5c$track_stop))  
+bYS39_5c$track_start <- as.numeric(as.character(bYS39_5c$track_start))  
+
+min <- min(bYS39_5c$track_start)
+max <- max(bYS39_5c$track_stop)
+
+bYS39_5c <- bYS39_5c %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_6a <- read_csv("R6a.(1.18)39,5nM,LP20,100ms,step-0.45,range-1.8,count-5,5sec,3min005_Reconstructed-1.csv", skip=2)
+
+bYS39_6a <- bYS39_6a %>% 
+  drop_na() 
+
+colnames(bYS39_6a)[11] <- "track_start"
+colnames(bYS39_6a)[12] <- "track_stop"
+
+bYS39_6a$track_stop <- as.numeric(as.character(bYS39_6a$track_stop))  
+bYS39_6a$track_start <- as.numeric(as.character(bYS39_6a$track_start))  
+
+min <- min(bYS39_6a$track_start)
+max <- max(bYS39_6a$track_stop)
+
+bYS39_6a <- bYS39_6a %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_7a <- read_csv("R7a. (1.18) 39,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min006_Reconstructed-1.csv", skip=2)
+
+bYS39_7a <- bYS39_7a %>% 
+  drop_na() 
+
+colnames(bYS39_7a)[11] <- "track_start"
+colnames(bYS39_7a)[12] <- "track_stop"
+
+bYS39_7a$track_stop <- as.numeric(as.character(bYS39_7a$track_stop))  
+bYS39_7a$track_start <- as.numeric(as.character(bYS39_7a$track_start))  
+
+min <- min(bYS39_7a$track_start)
+max <- max(bYS39_7a$track_stop)
+
+bYS39_7a <- bYS39_7a %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS39_11 <- read_csv("R5c. (1.18) 39,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min004_Reconstructed-1.csv", skip=2)
+
+bYS39_11 <- bYS39_11 %>% 
+  drop_na() 
+
+colnames(bYS39_11)[11] <- "track_start"
+colnames(bYS39_11)[12] <- "track_stop"
+
+bYS39_11$track_stop <- as.numeric(as.character(bYS39_11$track_stop)) 
+bYS39_11$track_start <- as.numeric(as.character(bYS39_11$track_start))  
+
+min <- min(bYS39_11$track_start)
+max <- max(bYS39_11$track_stop)
+
+bYS39_11 <- bYS39_11 %>% 
+  filter((track_stop != max) & (track_start != min))
+
+#put all data frames into list
+bYS39_list <- list(bYS39_1, bYS39_2, bYS39_3a, bYS39_3b, bYS39_3c, bYS39_3d, bYS39_4a, bYS39_4b, bYS39_4c, bYS39_4d, bYS39_4e, bYS39_5a, bYS39_5b, bYS39_5c, bYS39_6a, bYS39_7a, bYS39_11)      
+
+#merge all data frames together
+bYS39 <- bYS39_list %>% 
+  reduce(full_join)
+
+colnames(bYS39)[23] <- "total_distance"
+bYS39$total_distance <- as.numeric(as.character(bYS39$total_distance))  
+```
+
+```{r}
+# In the code below, I upload the tracks for the bYS1181 (phosphomimetic) strain
+# Each CSV represents data on tracks for a cell or multiple cells that were imaged at the same time
+# For each CSV, I filter out the tracks that start in the first frame because we cannot accurately measure lifetime if the track started before the video recording started 
+# For each CSV, I also filter out the tracks that end in the last frame because we cannot accurately measure lifetime if the track ended after the video recording ended 
+
+bYS81_3 <- read_csv("R3. (1.16) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min_Reconstructed.csv", skip=2)
+
+bYS81_3 <- bYS81_3 %>% 
+  drop_na() 
+
+colnames(bYS81_3)[11] <- "track_start"
+colnames(bYS81_3)[12] <- "track_stop"
+
+bYS81_3$track_stop <- as.numeric(as.character(bYS81_3$track_stop))  
+bYS81_3$track_start <- as.numeric(as.character(bYS81_3$track_start))  
+
+min <- min(bYS81_3$track_start)
+max <- max(bYS81_3$track_stop)
+
+bYS81_3 <- bYS81_3 %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_4 <- read_csv("R4. (1.16) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min001_Reconstructed.csv", skip=2)
+
+bYS81_4 <- bYS81_4 %>% 
+  drop_na() 
+
+colnames(bYS81_4)[11] <- "track_start"
+colnames(bYS81_4)[12] <- "track_stop"
+
+bYS81_4$track_stop <- as.numeric(as.character(bYS81_4$track_stop)) 
+bYS81_4$track_start <- as.numeric(as.character(bYS81_4$track_start))  
+
+min <- min(bYS81_4$track_start)
+max <- max(bYS81_4$track_stop)
+
+bYS81_4 <- bYS81_4 %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_5 <- read_csv("R5. (1.16) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min002_Reconstructed.csv", skip=2)
+
+bYS81_5 <- bYS81_5 %>% 
+  drop_na() 
+
+colnames(bYS81_5)[11] <- "track_start"
+colnames(bYS81_5)[12] <- "track_stop"
+
+bYS81_5$track_stop <- as.numeric(as.character(bYS81_5$track_stop)) 
+bYS81_5$track_start <- as.numeric(as.character(bYS81_5$track_start))  
+
+min <- min(bYS81_5$track_start)
+max <- max(bYS81_5$track_stop)
+
+bYS81_5 <- bYS81_5 %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_6 <- read_csv("R6. (1.16) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min003_2_Reconstructed.csv", skip=2)
+
+bYS81_6 <- bYS81_6 %>% 
+  drop_na() 
+
+colnames(bYS81_6)[11] <- "track_start"
+colnames(bYS81_6)[12] <- "track_stop"
+
+bYS81_6$track_stop <- as.numeric(as.character(bYS81_6$track_stop))  
+bYS81_6$track_start <- as.numeric(as.character(bYS81_6$track_start))  
+
+min <- min(bYS81_6$track_start)
+max <- max(bYS81_6$track_stop)
+
+bYS81_6 <- bYS81_6 %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_7a <- read_csv("R7a. (1.16) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min003_all_Reconstructed-1.csv", skip=2)
+
+bYS81_7a <- bYS81_7a %>% 
+  drop_na() 
+
+colnames(bYS81_7a)[11] <- "track_start"
+colnames(bYS81_7a)[12] <- "track_stop"
+
+bYS81_7a$track_stop <- as.numeric(as.character(bYS81_7a$track_stop))  
+bYS81_7a$track_start <- as.numeric(as.character(bYS81_7a$track_start))  
+
+min <- min(bYS81_7a$track_start)
+max <- max(bYS81_7a$track_stop)
+
+bYS81_7a <- bYS81_7a %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_7b <- read_csv("R7b. (1.16) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min003_all_Reconstructed-1.csv", skip=2)
+
+bYS81_7b <- bYS81_7b %>% 
+  drop_na() 
+
+colnames(bYS81_7b)[11] <- "track_start"
+colnames(bYS81_7b)[12] <- "track_stop"
+
+bYS81_7b$track_stop <- as.numeric(as.character(bYS81_7b$track_stop))  
+bYS81_7b$track_start <- as.numeric(as.character(bYS81_7b$track_start))  
+
+min <- min(bYS81_7b$track_start)
+max <- max(bYS81_7b$track_stop)
+
+bYS81_7b <- bYS81_7b %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_7c <- read_csv("R7c. (1.16) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min003_all_Reconstructed-1.csv", skip=2)
+
+bYS81_7c <- bYS81_7c %>% 
+  drop_na() 
+
+colnames(bYS81_7c)[11] <- "track_start"
+colnames(bYS81_7c)[12] <- "track_stop"
+
+bYS81_7c$track_stop <- as.numeric(as.character(bYS81_7c$track_stop))  
+bYS81_7c$track_start <- as.numeric(as.character(bYS81_7c$track_start))  
+
+min <- min(bYS81_7c$track_start)
+max <- max(bYS81_7c$track_stop)
+
+bYS81_7c <- bYS81_7c %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_7d <- read_csv("R7d. (1.16) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min003_all_Reconstructed-1.csv", skip=2)
+
+bYS81_7d <- bYS81_7d %>% 
+  drop_na() 
+
+colnames(bYS81_7d)[11] <- "track_start"
+colnames(bYS81_7d)[12] <- "track_stop"
+
+bYS81_7d$track_stop <- as.numeric(as.character(bYS81_7d$track_stop))  
+bYS81_7d$track_start <- as.numeric(as.character(bYS81_7d$track_start))  
+
+min <- min(bYS81_7d$track_start)
+max <- max(bYS81_7d$track_stop)
+
+bYS81_7d <- bYS81_7d %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_7e <- read_csv("R7e. (1.16) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min003_all_Reconstructed-1-1.csv", skip=2)
+
+bYS81_7e <- bYS81_7e %>% 
+  drop_na() 
+
+colnames(bYS81_7e)[11] <- "track_start"
+colnames(bYS81_7e)[12] <- "track_stop"
+
+bYS81_7e$track_stop <- as.numeric(as.character(bYS81_7e$track_stop))  
+bYS81_7e$track_start <- as.numeric(as.character(bYS81_7e$track_start))  
+
+min <- min(bYS81_7e$track_start)
+max <- max(bYS81_7e$track_stop)
+
+bYS81_7e <- bYS81_7e %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_7f <- read_csv("R7f. (1.16) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min003_all_Reconstructed-1.csv", skip=2)
+
+bYS81_7f <- bYS81_7f %>% 
+  drop_na() 
+
+colnames(bYS81_7f)[11] <- "track_start"
+colnames(bYS81_7f)[12] <- "track_stop"
+
+bYS81_7f$track_stop <- as.numeric(as.character(bYS81_7f$track_stop))  
+bYS81_7f$track_start <- as.numeric(as.character(bYS81_7f$track_start))  
+
+min <- min(bYS81_7f$track_start)
+max <- max(bYS81_7f$track_stop)
+
+bYS81_7f <- bYS81_7f %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_8 <- read_csv("R8. (1.16) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min003_Reconstructed.csv", skip=2)
+
+bYS81_8 <- bYS81_8 %>% 
+  drop_na() 
+
+colnames(bYS81_8)[11] <- "track_start"
+colnames(bYS81_8)[12] <- "track_stop"
+
+bYS81_8$track_stop <- as.numeric(as.character(bYS81_8$track_stop))  
+bYS81_8$track_start <- as.numeric(as.character(bYS81_8$track_start))  
+
+min <- min(bYS81_8$track_start)
+max <- max(bYS81_8$track_stop)
+
+bYS81_8 <- bYS81_8 %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_10b <- read_csv("R10b. (1.18) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min001_Reconstructed-1.csv", skip=2)
+
+bYS81_10b <- bYS81_10b %>% 
+  drop_na() 
+
+colnames(bYS81_10b)[11] <- "track_start"
+colnames(bYS81_10b)[12] <- "track_stop"
+
+bYS81_10b$track_stop <- as.numeric(as.character(bYS81_10b$track_stop))  
+bYS81_10b$track_start <- as.numeric(as.character(bYS81_10b$track_start))  
+
+min <- min(bYS81_10b$track_start)
+max <- max(bYS81_10b$track_stop)
+
+bYS81_10b <- bYS81_10b %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_11a <- read_csv("R11a. (1.18) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min002_Reconstructed-1.csv", skip=2)
+
+bYS81_11a <- bYS81_11a %>% 
+  drop_na() 
+
+colnames(bYS81_11a)[11] <- "track_start"
+colnames(bYS81_11a)[12] <- "track_stop"
+
+bYS81_11a$track_stop <- as.numeric(as.character(bYS81_11a$track_stop))  
+bYS81_11a$track_start <- as.numeric(as.character(bYS81_11a$track_start))  
+
+min <- min(bYS81_11a$track_start)
+max <- max(bYS81_11a$track_stop)
+
+bYS81_11a <- bYS81_11a %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_12a <- read_csv("R12a. (1.18) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min004_Reconstructed-1.csv", skip=2)
+
+bYS81_12a <- bYS81_12a %>% 
+  drop_na() 
+
+colnames(bYS81_12a)[11] <- "track_start"
+colnames(bYS81_12a)[12] <- "track_stop"
+
+bYS81_12a$track_stop <- as.numeric(as.character(bYS81_12a$track_stop))  
+bYS81_12a$track_start <- as.numeric(as.character(bYS81_12a$track_start))  
+
+min <- min(bYS81_12a$track_start)
+max <- max(bYS81_12a$track_stop)
+
+bYS81_12a <- bYS81_12a %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_14a <- read_csv("R14a. (1.18) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min006_Reconstructed-1.csv", skip=2)
+
+bYS81_14a <- bYS81_14a %>% 
+  drop_na() 
+
+colnames(bYS81_14a)[11] <- "track_start"
+colnames(bYS81_14a)[12] <- "track_stop"
+
+bYS81_14a$track_stop <- as.numeric(as.character(bYS81_14a$track_stop))  
+bYS81_14a$track_start <- as.numeric(as.character(bYS81_14a$track_start))  
+
+min <- min(bYS81_14a$track_start)
+max <- max(bYS81_14a$track_stop)
+
+bYS81_14a <- bYS81_14a %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS81_15a <- read_csv("R15a. (1.18) 81,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min007_Reconstructed-1.csv", skip=2)
+
+bYS81_15a <- bYS81_15a %>% 
+  drop_na() 
+
+colnames(bYS81_15a)[11] <- "track_start"
+colnames(bYS81_15a)[12] <- "track_stop"
+
+bYS81_15a$track_stop <- as.numeric(as.character(bYS81_15a$track_stop))  
+bYS81_15a$track_start <- as.numeric(as.character(bYS81_15a$track_start))  
+
+min <- min(bYS81_15a$track_start)
+max <- max(bYS81_15a$track_stop)
+
+bYS81_15a <- bYS81_15a %>% 
+  filter((track_stop != max) & (track_start != min))
+
+#put all data frames into list
+bYS81_list <- list(bYS81_3, bYS81_4, bYS81_5, bYS81_6, bYS81_7a, bYS81_7b, bYS81_7c, bYS81_7d, bYS81_7e, bYS81_7f, bYS81_8, bYS81_10b, bYS81_11a, bYS81_12a, bYS81_14a, bYS81_15a)      
+
+#merge all data frames together
+bYS81 <- bYS81_list %>% 
+  reduce(full_join)
+
+colnames(bYS81)[23] <- "total_distance"
+
+bYS81$total_distance <- as.numeric(as.character(bYS81$total_distance))  
+```
+
+```{r}
+# In the code below, I upload the tracks for the bYS1183 (phosphoablative) strain
+# Each CSV represents data on tracks for a cell or multiple cells that were imaged at the same time
+# For each CSV, I filter out the tracks that start in the first frame because we cannot accurately measure lifetime if the track started before the video recording started 
+# For each CSV, I also filter out the tracks that end in the last frame because we cannot accurately measure lifetime if the track ended after the video recording ended 
+
+bYS83_1b <- read_csv("R1b. (1.16) 83,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min001_all_Reconstructed-1.csv", skip=2)
+
+bYS83_1b <- bYS83_1b %>% 
+  drop_na() 
+
+colnames(bYS83_1b)[11] <- "track_start"
+colnames(bYS83_1b)[12] <- "track_stop"
+
+bYS83_1b$track_stop <- as.numeric(as.character(bYS83_1b$track_stop))  
+bYS83_1b$track_start <- as.numeric(as.character(bYS83_1b$track_start))  
+
+min <- min(bYS83_1b$track_start)
+max <- max(bYS83_1b$track_stop)
+
+bYS83_1b <- bYS83_1b %>% 
+  filter((track_stop != max) & (track_start != min))
+bYS83_1c <- read_csv("R1c. (1.16) 83,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min001_all_Reconstructed-1.csv", skip=2)
+
+bYS83_1c <- bYS83_1c %>% 
+  drop_na() 
+
+colnames(bYS83_1c)[11] <- "track_start"
+colnames(bYS83_1c)[12] <- "track_stop"
+
+bYS83_1c$track_stop <- as.numeric(as.character(bYS83_1c$track_stop))  
+bYS83_1c$track_start <- as.numeric(as.character(bYS83_1c$track_start))  
+
+min <- min(bYS83_1c$track_start)
+max <- max(bYS83_1c$track_stop)
+
+bYS83_1c <- bYS83_1c %>% 
+  filter((track_stop != max) & (track_start != min))
+bYS83_1d <- read_csv("R1d. (1.16) 83,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min001_all_Reconstructed-1.csv", skip=2)
+
+bYS83_1d <- bYS83_1d %>% 
+  drop_na() 
+
+colnames(bYS83_1d)[11] <- "track_start"
+colnames(bYS83_1d)[12] <- "track_stop"
+
+bYS83_1d$track_stop <- as.numeric(as.character(bYS83_1d$track_stop))  
+bYS83_1d$track_start <- as.numeric(as.character(bYS83_1d$track_start))  
+
+min <- min(bYS83_1d$track_start)
+max <- max(bYS83_1d$track_stop)
+
+bYS83_1d <- bYS83_1d %>% 
+  filter((track_stop != max) & (track_start != min))
+bYS83_2a <- read_csv("R2a. (1.18) 83,5nM,LP20,100ms,step-0.45,range-1.8,count-5,5sec,3min_Reconstructed.csv", skip=2)
+
+bYS83_2a <- bYS83_2a %>% 
+  drop_na() 
+
+colnames(bYS83_2a)[11] <- "track_start"
+colnames(bYS83_2a)[12] <- "track_stop"
+
+bYS83_2a$track_stop <- as.numeric(as.character(bYS83_2a$track_stop))  
+bYS83_2a$track_start <- as.numeric(as.character(bYS83_2a$track_start))  
+
+min <- min(bYS83_2a$track_start)
+max <- max(bYS83_2a$track_stop)
+
+bYS83_2a <- bYS83_2a %>% 
+  filter((track_stop != max) & (track_start != min))
+bYS83_2b <- read_csv("R2b. (1.18) 83,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min_Reconstructed.csv", skip=2)
+
+bYS83_2b <- bYS83_2b %>% 
+  drop_na() 
+
+colnames(bYS83_2b)[11] <- "track_start"
+colnames(bYS83_2b)[12] <- "track_stop"
+
+bYS83_2b$track_stop <- as.numeric(as.character(bYS83_2b$track_stop))  
+bYS83_2b$track_start <- as.numeric(as.character(bYS83_2b$track_start))  
+
+min <- min(bYS83_2b$track_start)
+max <- max(bYS83_2b$track_stop)
+
+bYS83_2b <- bYS83_2b %>% 
+  filter((track_stop != max) & (track_start != min))
+bYS83_2c <- read_csv("R2c. (1.18) 83,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min_Reconstructed-1.csv", skip=2)
+
+bYS83_2c <- bYS83_2c %>% 
+  drop_na() 
+
+colnames(bYS83_2c)[11] <- "track_start"
+colnames(bYS83_2c)[12] <- "track_stop"
+
+bYS83_2c$track_stop <- as.numeric(as.character(bYS83_2c$track_stop))  
+bYS83_2c$track_start <- as.numeric(as.character(bYS83_2c$track_start)) 
+
+min <- min(bYS83_2c$track_start)
+max <- max(bYS83_2c$track_stop)
+
+bYS83_2c <- bYS83_2c %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS83_2f <- read_csv("R2f. (1.18) 83,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min_Reconstructed-1-1.csv", skip=2)
+
+bYS83_2f <- bYS83_2f %>% 
+  drop_na() 
+
+colnames(bYS83_2f)[11] <- "track_start"
+colnames(bYS83_2f)[12] <- "track_stop"
+
+bYS83_2f$track_stop <- as.numeric(as.character(bYS83_2f$track_stop))  
+bYS83_2f$track_start <- as.numeric(as.character(bYS83_2f$track_start))  
+
+min <- min(bYS83_2f$track_start)
+max <- max(bYS83_2f$track_stop)
+
+bYS83_2f <- bYS83_2f %>% 
+  filter((track_stop != max) & (track_start != min))
+bYS83_2g <- read_csv("R2g. (1.18) 83,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min_Reconstructed-1-1.csv", skip=2)
+
+bYS83_2g <- bYS83_2g %>% 
+  drop_na() 
+
+colnames(bYS83_2g)[11] <- "track_start"
+colnames(bYS83_2g)[12] <- "track_stop"
+
+bYS83_2g$track_stop <- as.numeric(as.character(bYS83_2g$track_stop))  
+bYS83_2g$track_start <- as.numeric(as.character(bYS83_2g$track_start))  
+
+min <- min(bYS83_2g$track_start)
+max <- max(bYS83_2g$track_stop)
+
+bYS83_2g <- bYS83_2g %>% 
+  filter((track_stop != max) & (track_start != min))
+bYS83_2h <- read_csv("R2h. (1.18) 83,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min_Reconstructed-1-1.csv", skip=2)
+
+bYS83_2h <- bYS83_2h %>% 
+  drop_na() 
+
+colnames(bYS83_2h)[11] <- "track_start"
+colnames(bYS83_2h)[12] <- "track_stop"
+
+bYS83_2h$track_stop <- as.numeric(as.character(bYS83_2h$track_stop))  
+bYS83_2h$track_start <- as.numeric(as.character(bYS83_2h$track_start))  
+
+min <- min(bYS83_2h$track_start)
+max <- max(bYS83_2h$track_stop)
+
+bYS83_2h <- bYS83_2h %>% 
+  filter((track_stop != max) & (track_start != min))
+bYS83_2i <- read_csv("R2i. (1.18) 83,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min_Reconstructed-1.csv", skip=2)
+
+bYS83_2i <- bYS83_2i %>% 
+  drop_na() 
+
+colnames(bYS83_2i)[11] <- "track_start"
+colnames(bYS83_2i)[12] <- "track_stop"
+
+bYS83_2i$track_stop <- as.numeric(as.character(bYS83_2i$track_stop))  
+bYS83_2i$track_start <- as.numeric(as.character(bYS83_2i$track_start))  
+
+min <- min(bYS83_2i$track_start)
+max <- max(bYS83_2i$track_stop)
+
+bYS83_2i <- bYS83_2i %>% 
+  filter((track_stop != max) & (track_start != min))
+bYS83_2j <- read_csv("R2j. (1.18) 83,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min_Reconstructed-1.csv", skip=2)
+
+bYS83_2j <- bYS83_2j %>% 
+  drop_na() 
+
+colnames(bYS83_2j)[11] <- "track_start"
+colnames(bYS83_2j)[12] <- "track_stop"
+
+bYS83_2j$track_stop <- as.numeric(as.character(bYS83_2j$track_stop))  
+bYS83_2j$track_start <- as.numeric(as.character(bYS83_2j$track_start))  
+
+min <- min(bYS83_2j$track_start)
+max <- max(bYS83_2j$track_stop)
+
+bYS83_2j <- bYS83_2j %>% 
+  filter((track_stop != max) & (track_start != min))
+bYS83_2k <- read_csv("R2k. (1.18) 83,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min_Reconstructed-1.csv", skip=2)
+
+bYS83_2k <- bYS83_2k %>% 
+  drop_na() 
+
+colnames(bYS83_2k)[11] <- "track_start"
+colnames(bYS83_2k)[12] <- "track_stop"
+
+bYS83_2k$track_stop <- as.numeric(as.character(bYS83_2k$track_stop))  
+bYS83_2k$track_start <- as.numeric(as.character(bYS83_2k$track_start))  
+
+min <- min(bYS83_2k$track_start)
+max <- max(bYS83_2k$track_stop)
+
+bYS83_2k <- bYS83_2k %>% 
+  filter((track_stop != max) & (track_start != min))
+bYS83_3a <- read_csv("R3a. (1.18) 83,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min001_Reconstructed.csv", skip=2)
+
+bYS83_3a <- bYS83_3a %>% 
+  drop_na() 
+
+colnames(bYS83_3a)[11] <- "track_start"
+colnames(bYS83_3a)[12] <- "track_stop"
+
+bYS83_3a$track_stop <- as.numeric(as.character(bYS83_3a$track_stop))  
+bYS83_3a$track_start <- as.numeric(as.character(bYS83_3a$track_start))  
+
+min <- min(bYS83_3a$track_start)
+max <- max(bYS83_3a$track_stop)
+
+bYS83_3a <- bYS83_3a %>% 
+  filter((track_stop != max) & (track_start != min))
+
+bYS83_4b <- read_csv("R4b. (1.18) 83,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min002_Reconstructed-1.csv", skip=2)
+
+bYS83_4b <- bYS83_4b %>% 
+  drop_na() 
+
+colnames(bYS83_4b)[11] <- "track_start"
+colnames(bYS83_4b)[12] <- "track_stop"
+
+bYS83_4b$track_stop <- as.numeric(as.character(bYS83_4b$track_stop))  
+bYS83_4b$track_start <- as.numeric(as.character(bYS83_4b$track_start))  
+
+min <- min(bYS83_4b$track_start)
+max <- max(bYS83_4b$track_stop)
+
+bYS83_4b <- bYS83_4b %>% 
+  filter((track_stop != max) & (track_start != min))
+bYS83_5 <- read_csv("R5. (1.18) 83,5nM,LP20,100ms, step-0.45, range-1.8,count-5,5sec,3min003_Reconstructed.csv", skip=2)
+
+bYS83_5 <- bYS83_5 %>% 
+  drop_na() 
+
+colnames(bYS83_5)[11] <- "track_start"
+colnames(bYS83_5)[12] <- "track_stop"
+
+bYS83_5$track_stop <- as.numeric(as.character(bYS83_5$track_stop)) 
+bYS83_5$track_start <- as.numeric(as.character(bYS83_5$track_start))  
+
+min <- min(bYS83_5$track_start)
+max <- max(bYS83_5$track_stop)
+
+bYS83_5 <- bYS83_5 %>% 
+  filter((track_stop != max) & (track_start != min))
+
+#put all data frames into list
+bYS83_list <- list(bYS83_1b, bYS83_1c, bYS83_1d, bYS83_2a, bYS83_2b, bYS83_2c, bYS83_2f, bYS83_2g, bYS83_2h, bYS83_2i, bYS83_2j, bYS83_2k,  bYS83_3a, bYS83_4b, bYS83_5)      
+
+#merge all data frames together
+bYS83 <- bYS83_list %>% 
+  reduce(full_join)
+
+colnames(bYS83)[23] <- "total_distance"
+
+bYS83$total_distance <- as.numeric(as.character(bYS83$total_distance))  
+```
+
+```{r}
+#Here I combine all strains in on dataframe
+
+bYS39 <- bYS39 %>% 
+  mutate(strain = "WT")
+
+bYS81 <- bYS81 %>% 
+  mutate(strain = "Phosphomimetic mutant")
+
+bYS83 <- bYS83 %>% 
+  mutate(strain = "Phosphoablative mutant")
+
+#put all data frames into list
+bYS_list <- list(bYS39, bYS81, bYS83)      
+
+#merge all data frames together
+bYS <- bYS_list %>% 
+  reduce(full_join)
+
+bYS <- mutate(bYS, strain = fct_relevel(strain, "WT", "Phosphomimetic mutant", "Phosphoablative mutant"))
+
+colnames(bYS)[13] <- "track_displacement"
+colnames(bYS)[4] <- "nr_spots"
+
+bYS39$Duration <- as.numeric(as.character(bYS39$Duration))  
+bYS81$Duration <- as.numeric(as.character(bYS81$Duration)) 
+bYS83$Duration <- as.numeric(as.character(bYS83$Duration))  
+
+bYS$Duration <- as.numeric(as.character(bYS$Duration)) 
+```
+
+
+
+
